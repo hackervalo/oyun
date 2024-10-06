@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tıkla Oyunu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #gameArea {
+            margin-top: 20px;
+            position: relative;
+            width: 300px;
+            height: 300px;
+            background-color: #fff;
+            border: 2px solid #333;
+            overflow: hidden;
+        }
+        #target {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            position: absolute;
+        }
+        #startButton {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tıkla Oyunu</h1>
+    <input type="text" id="playerName" placeholder="Adınızı girin" required>
+    <button id="startButton">Oyuna Başla</button>
+    
+    <div id="gameArea" style="display: none;">
+        <div id="target"></div>
+    </div>
+
+    <h2 id="score">Puan: 0</h2>
+    <h2 id="result" style="display: none;"></h2>
+
+    <script>
+        let score = 0;
+        let isGameActive = false;
+        let gameTime = 10; // Oyun süresi
+        let timer;
+
+        document.getElementById('startButton').onclick = function() {
+            const playerName = document.getElementById('playerName').value;
+            if (playerName) {
+                startGame();
+            } else {
+                alert('Lütfen adınızı girin!');
+            }
+        };
+
+        function startGame() {
+            score = 0;
+            isGameActive = true;
+            document.getElementById('gameArea').style.display = 'block';
+            document.getElementById('score').innerText = 'Puan: ' + score;
+            document.getElementById('result').style.display = 'none';
+            moveTarget();
+            startTimer();
+        }
+
+        function moveTarget() {
+            if (!isGameActive) return;
+            const target = document.getElementById('target');
+            const x = Math.random() * (250 - 50); // 300 - 50 (hedef boyutu)
+            const y = Math.random() * (250 - 50); // 300 - 50 (hedef boyutu)
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
+        }
+
+        document.getElementById('target').onclick = function() {
+            if (isGameActive) {
+                score++;
+                document.getElementById('score').innerText = 'Puan: ' + score;
+                moveTarget();
+            }
+        };
+
+        function startTimer() {
+            timer = setTimeout(endGame, gameTime * 1000);
+        }
+
+        function endGame() {
+            isGameActive = false;
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('result').innerText = 'Oyun bitti! ' + score + ' puan kazandınız.';
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
